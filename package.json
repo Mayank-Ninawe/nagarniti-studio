@@ -1,0 +1,32 @@
+{
+  "name": "nagarniti",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.3.0",
+    "firebase": "^10.8.1",
+    "framer-motion": "^11.0.8",
+    "leaflet": "^1.9.4",
+    "lucide-react": "^1.21.0",
+    "motion": "^12.41.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-leaflet": "^4.2.1",
+    "react-router-dom": "^6.22.3",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "eslint": "^8.57.0",
+    "tailwindcss": "^4.3.1",
+    "vite": "^5.4.2"
+  }
+}

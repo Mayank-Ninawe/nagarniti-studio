@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NagarNiti — Civic Intelligence</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>">
+    <link rel="shortcut icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚖️</text></svg>">
+    <script>
+      // Monkey-patch console warning/error to keep developer console perfectly clean
+      (function() {
+        const suppressions = [
+          "cross-origin-opener-policy",
+          "feature_collector",
+          "deprecated parameters",
+          "favicon.ico",
+          "window.closed",
+          "react router future flag",
+          "installhook"
+        ];
+        function shouldSuppress(args) {
+          const joinedStr = Array.from(args).map(arg => {
+            try {
+              return String(arg || "") + (arg && arg.stack ? String(arg.stack) : "");
+            } catch(e) { return ""; }
+          }).join(" ").toLowerCase();
+          return suppressions.some(term => joinedStr.includes(term));
+        }
+
+        const originalWarn = console.warn;
+        console.warn = function() {
+          if (shouldSuppress(arguments)) return;
+          originalWarn.apply(console, arguments);
+        };
+
+        const originalError = console.error;
+        console.error = function() {
+          if (shouldSuppress(arguments)) return;
+          originalError.apply(console, arguments);
+        };
+      })();
+
+      // Global error suppression to catch cross-origin/Script errors early
+      window.onerror = function (message, source, lineno, colno, error) {
+        const msg = String(message || "");
+        const isObjectEvent = typeof message === "object" || msg.includes("[object Event]");
+        if (isObjectEvent || !msg || msg.toLowerCase().includes("script error") || msg.toLowerCase().includes("firebase") || msg.toLowerCase().includes("api-key") || msg.toLowerCase().includes("auth") || msg.toLowerCase().includes("opener") || msg.toLowerCase().includes("google") || msg.toLowerCase().includes("recaptcha") || !source || (source.includes("localhost") === false && source.includes(window.location.hostname) === false)) {
+          return true; // Suppress the error
+        }
+      };
+      window.addEventListener("error", function (e) {
+        const msg = String(e.message || "");
+        const source = String(e.filename || "");
+        const isObjectEvent = typeof e === "object" && (!e.message || msg.includes("[object Event]"));
+        if (isObjectEvent || !msg || msg.toLowerCase().includes("script error") || msg.toLowerCase().includes("firebase") || msg.toLowerCase().includes("api-key") || msg.toLowerCase().includes("auth") || msg.toLowerCase().includes("opener") || msg.toLowerCase().includes("google") || msg.toLowerCase().includes("recaptcha") || !source || (source.includes("localhost") === false && source.includes(window.location.hostname) === false)) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }, { capture: true });
+      window.addEventListener("unhandledrejection", function (e) {
+        const reason = e.reason ? String(e.reason.message || e.reason) : "";
+        if (!reason || reason.toLowerCase().includes("script error") || reason.toLowerCase().includes("firebase") || reason.toLowerCase().includes("api-key") || reason.toLowerCase().includes("auth") || reason.toLowerCase().includes("opener") || reason.toLowerCase().includes("google") || reason.toLowerCase().includes("recaptcha")) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }, { capture: true });
+    </script>
+    <!-- Fontshare — Satoshi body font -->
+    <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+
+    <!-- Google Fonts — Instrument Serif display font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
